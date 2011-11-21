@@ -5,9 +5,9 @@
 require('quantmod')
 
 periodToUse <- 'monthly'
-periodStart <- '2005-01-01'
-periodRange <- '2005-01::2011-09'
-famaPeriodStart <- 200501
+periodStart <- '1970-02-01'
+periodRange <- '1970-02::2009-12'
+famaPeriodStart <- 197002
 
 #Url for fama french monthly data and the file name in the zip
 famaFrenchZip <- "http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Benchmark_Factors_Monthly.zip"
@@ -19,19 +19,20 @@ famaFrenchData <- read.table(unz(temp, famaFrenchFile),  header = TRUE)
 unlink(temp)
 
 famaSubset = famaFrenchData[famaFrenchData$Rm. >= famaPeriodStart, c("Rm.", "Rf", "SMB", "HML")]
+famaSubset = famaSubset[famaSubset$Rm. <= 200912, c("Rm.", "Rf", "SMB", "HML")]
 
-getSymbols(c("ADM", "^GSPC"), src="yahoo", from = periodStart)
+getSymbols(c("JNJ", "^IRX"), src="yahoo", from = periodStart)
 
 #Convert data to monthly returns
-admMonthly <- periodReturn(ADM,period=periodToUse,subset=periodRange)
-marketMonthly <- periodReturn(GSPC,period=periodToUse,subset=periodRange)
+equityMonthly <- periodReturn(JNJ$JNJ.Adjusted,period=periodToUse,subset=periodRange) * 100
+riskFreeMonthly <- apply.monthly(IRX[periodRange], last)$IRX.Adjusted / 12
 
+equityExcessReturn = equityMonthly - riskFreeMonthly
 
-admExcessReturn = admMonthly - famaSubset$Rf
-marketExcessReturn = marketMonthly - famaSubset$Rf
+capmModel = lm(equityExcessReturn ~ famaSubset$Rf)
+threeFactorModel = lm(equityExcessReturn ~ famaSubset$Rf + famaSubset$SMB + famaSubset$HML)
 
-threeFactorModel = lm(admExcessReturn ~ famaSubset$SMB + famaSubset$HML + marketExcessReturn)
-
+print(summary(capmModel))
 print(summary(threeFactorModel))
 
 
