@@ -3,7 +3,7 @@ require("texreg")
 
 regData = read.csv("~/Downloads/regdata.csv")
 
-regData = transform(regData, NCallOILag1 = c(NCallOI[-1], NA))
+regData = transform(regData, NCallOILag1 = c(NCallOI))
 #regData = transform(regData, NCallOIChangedLag1 = c(NCallOIChanged[-1], NA))
 regData = transform(regData, NPutOILag1 = c(NPutOI[-1], NA))
 #regData = transform(regData, NPutOIChangeLag1 = c(NPutOIChange[-1], NA))

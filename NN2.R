@@ -19,27 +19,33 @@ regData = transform(regData, MeanIVLag1 = c(MeanIV[-1], NA))
 regData = transform(regData, CallIVLag1 = c(CallIV[-1], NA))
 regData = transform(regData, PutIVLag1 = c(PutIV[-1], NA))
 regData = transform(regData, Excess.ReturnLag1 = c(Excess.Return[-1], NA))
-regData = transform(regData, PositiveReturn = c(Excess.Return > 0.01))
+regData = transform(regData, PositiveReturn = c((Excess.Return > 0.02)*1))
 
-nnBase = regData[regData$DateDiff >= -139 & regData$DateDiff <= -1 ,]
+nnBase = regData[regData$DateDiff >= -139 & regData$DateDiff <= -31 ,]
 
-trainIndex <- createDataPartition(nnBase$Excess.Return, p=.7, list=F)
+trainIndex <- createDataPartition(nnBase$PositiveReturn, p=.7, list=F)
 nnmodel.train <- nnBase[trainIndex, ]
 nnmodel.test <- nnBase[-trainIndex, ]
 
 
-nnmodel.grid <- expand.grid(.layer1=c(8), .layer2=c(3), .layer3=c(0))
-nnmodel.fit <- train(Return ~ NMeanIVLag1 + NCallOILag1 + NMeanIVLag2 + NCallOILag2, 
-                     data = nnmodel.train, method = "neuralnet", tuneGrid = nnmodel.grid)  
+nnmodel.grid <- expand.grid(.layer1=c(8), .layer2=c(3), .layer3=c(2))
+nnmodel.fit <- train(PositiveReturn ~ NMeanIVLag1 + NCallOILag1 + NMeanIVLag2 + NCallOILag2, 
+                     data = nnmodel.train, method = "neuralnet", tuneGrid = nnmodel.grid, err.fct="ce", 
+                     rep=5)  
 
+
+#neuralnet(
+#  formula = case~age+parity+induced+spontaneous,
+#  data = infert, hidden = 2, err.fct = "ce",
+#  linear.output = FALSE)
 
 nnmodel.predict <- predict(nnmodel.fit, newdata = nnmodel.test)
-nnmodel.rmse <- sqrt(mean((nnmodel.predict - nnmodel.test$Return)^2)) 
+nnmodel.rmse <- sqrt(mean((nnmodel.predict - nnmodel.test$PositiveReturn)^2)) 
 
 print(nnmodel.rmse)
 
-t1 = nnmodel.test$Return > 0
-t2 = nnmodel.predict > 0
+t1 = nnmodel.test$PositiveReturn > 0
+t2 = nnmodel.predict > 0.5
 t3 = summary(t1 == t2)
 print(t3)
 
