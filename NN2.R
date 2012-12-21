@@ -1,7 +1,7 @@
 
 library("caret")
 library(doMC)
-registerDoMC(4)
+registerDoMC(6)
 
 #dev.off()
 
@@ -28,9 +28,9 @@ nnmodel.train <- nnBase[trainIndex, ]
 nnmodel.test <- nnBase[-trainIndex, ]
 
 
-nnmodel.grid <- expand.grid(.layer1=c(8), .layer2=c(3), .layer3=c(2))
+nnmodel.grid <- expand.grid(.layer1=c(20), .layer2=c(20), .layer3=c(20))
 nnmodel.fit <- train(PositiveReturn ~ NMeanIVLag1 + NCallOILag1 + NMeanIVLag2 + NCallOILag2, 
-                     data = nnmodel.train, method = "neuralnet", tuneGrid = nnmodel.grid, err.fct="ce", 
+                     data = nnmodel.train, method = "neuralnet", tuneGrid = nnmodel.grid,
                      rep=5)  
 
 

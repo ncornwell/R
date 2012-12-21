@@ -45,5 +45,10 @@ preds = predictions > 0.75
 
 t1 = preds & nnCE$outPositiveReturn
 
+t2 = t1 * nnCE$Return
+
+nnCE = transform(nnCE, actualReturn = t1 * nnCE$Return)
+
+nnCE = nnCE[nnCE$actualReturn > 0  ,]
 print(sum(t1)/sum(preds))
 
