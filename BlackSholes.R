@@ -1,4 +1,4 @@
-## Black-Scholes Function
+##  Program for Black-Scholes Function
 BS <- function(S, K, T, r, sig, type="C"){
     d1 <- (log(S/K) + (r + sig^2/2)*T) / (sig*sqrt(T))
     d2 <- d1 - sig*sqrt(T)
@@ -12,7 +12,7 @@ BS <- function(S, K, T, r, sig, type="C"){
 }
 
 
-## Function to find BS Implied Vol using Bisection Method
+##  This is a function to find BS Implied Vol using Bisection Method
 implied.vol <-
   function(S, K, T, r, market, type){
     sig <- 0.20
@@ -41,3 +41,8 @@ implied.vol <-
       return(sig)
     }
   }
+
+#changes
+#kaustubh
+#githubfiddlingaround
+#lenovo
