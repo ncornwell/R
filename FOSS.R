@@ -33,7 +33,7 @@ initPortf("faber", symbols=symbols, initDate=initDate)
 initAcct("faber", portfolios="faber", initDate=initDate, initEq=initEq)
 initOrders(portfolio="faber", initDate=initDate)
 
-# Initialize a strategy object
+# Initialising a strategy object
 stratFaber <- strategy("faber")
 
 # Add the 10-month SMA indicator

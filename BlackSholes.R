@@ -13,6 +13,7 @@ BS <- function(S, K, T, r, sig, type="C"){
 
 
 ##  This is a function to find BS Implied Vol using Bisection Method
+## Feel free to fork this and add your own changes!
 implied.vol <-
   function(S, K, T, r, market, type){
     sig <- 0.20
@@ -42,7 +43,3 @@ implied.vol <-
     }
   }
 
-#changes
-#kaustubh
-#githubfiddlingaround
-#lenovo

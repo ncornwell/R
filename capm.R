@@ -1,4 +1,5 @@
 #Uncomment this to install the quantmod package for the first time
+#did you uncomment??
 #install.packages("quantmod")
 
 #Load required libraries
