@@ -131,7 +131,7 @@ twitterMap <- function(userName,userLocation=NULL,fileName="twitterMap.pdf",nMax
   followingLL = followingLL[!is.na(followingLL[,1]),]
   followersLL = followersLL[!is.na(followersLL[,1]),]
   
-
+#twitter
   cat("Plotting results.\n")
   # Set up the colors
   cols = brewer.pal(7,"Set2")
